@@ -3,7 +3,7 @@ import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power__up_manager import PowerUpManager
-from dino_runner.utils.constants import BG, CLOUD, DINO_START, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, CLOUD, DEAD, DINO_START, GAME_OVER, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.utils.image_utils import get_centered_image
 from dino_runner.utils.tex_utils import get_centered_message, get_score_element
 
@@ -42,10 +42,17 @@ class Game:
 
     def show_menu(self):
         self.screen.fill((255, 255, 255))
-        self.screen.blit(*get_centered_image(CLOUD, 100, 100))
-        self.screen.blit(*get_centered_image(DINO_START, 0, -100))
-        self.screen.blit(*get_centered_message('Press any kay to start!!'))
+        if self.death_count == 0:
+            self.screen.blit(*get_centered_image(DINO_START, 0, -100))
+            self.screen.blit(*get_centered_message('Press any KEY to START!!'))
+        else:
+            self.screen.blit(*get_centered_message('Press any KEY to START AGAIN!!'))
+            self.screen.blit(*get_centered_image(DEAD, 0, -100))
+            self.screen.blit(*get_centered_image(GAME_OVER, 0, -30))
+            
+        self.screen.blit(*get_centered_image(CLOUD, 100, -120))
         self.screen.blit(*get_centered_message(f"Death Count: {self.death_count}", y_offset = 40, font_size= 20))
+
         pygame.display.update()
 
         events = pygame.event.get()
