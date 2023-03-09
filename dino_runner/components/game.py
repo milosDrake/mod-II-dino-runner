@@ -2,6 +2,7 @@ import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.tex_utils import get_score_element
 
 
 class Game:
@@ -17,6 +18,16 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.points = 0
+
+    def show_score(self):
+        self.points += 1
+
+        if self.points % 50 == 0:
+            self.game_speed += 1
+            
+        score, score_rect = get_score_element(self.points)
+        self.screen.blit(score, score_rect)    
 
     def run(self):
         # Game loop: events - update - draw
@@ -43,6 +54,7 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.show_score()
         pygame.display.update()
         pygame.display.flip()
 
