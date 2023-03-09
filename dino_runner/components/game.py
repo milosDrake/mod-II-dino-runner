@@ -1,3 +1,4 @@
+import random
 import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
@@ -20,6 +21,10 @@ class Game:
         self.game_speed = self.INITIAL_SPEED
         self.x_pos_bg = 0
         self.y_pos_bg = 380
+        self.cloud = CLOUD
+        self.cloud_rect = self.cloud.get_rect()
+        self.cloud_rect.x = SCREEN_WIDTH
+        self.cloud_rect.y = random.randint(50, 250)
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
@@ -91,7 +96,14 @@ class Game:
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
+        self.screen.blit(self.cloud, self.cloud_rect)
+        
         if self.x_pos_bg <= -image_width:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+
+        self.cloud_rect.x -= self.game_speed
+        if self.cloud_rect.x < self.cloud_rect.width:
+            self.cloud_rect.x = SCREEN_WIDTH
+            self.cloud_rect.y = random.randint(10, 300)
