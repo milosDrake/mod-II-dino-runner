@@ -1,7 +1,9 @@
 import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.components.power_ups.power__up_manager import PowerUpManager
+from dino_runner.utils.constants import BG, CLOUD, DINO_START, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.image_utils import get_centered_image
 from dino_runner.utils.tex_utils import get_centered_message, get_score_element
 
 
@@ -20,6 +22,7 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
         self.points = 0
         self.death_count = 0
 
@@ -34,10 +37,10 @@ class Game:
 
     def show_menu(self):
         self.screen.fill((255, 255, 255))
-        text, text_rect = get_centered_message('Press any kay to start!!')
-        self.screen.blit(text, text_rect)
-        text, text_rect = get_centered_message(f"Death Count: {self.death_count}", y_offset = 40, font_size= 20)
-        self.screen.blit(text, text_rect)
+        self.screen.blit(*get_centered_image(CLOUD, 100, 100))
+        self.screen.blit(*get_centered_image(DINO_START, 0, -100))
+        self.screen.blit(*get_centered_message('Press any kay to start!!'))
+        self.screen.blit(*get_centered_message(f"Death Count: {self.death_count}", y_offset = 40, font_size= 20))
         pygame.display.update()
 
         events = pygame.event.get()
@@ -71,6 +74,7 @@ class Game:
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
+        self.power_up_manager.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -78,6 +82,7 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         self.show_score()
         pygame.display.update()
         pygame.display.flip()
