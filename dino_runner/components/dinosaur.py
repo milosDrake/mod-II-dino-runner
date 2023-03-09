@@ -1,5 +1,5 @@
 import pygame
-from dino_runner.utils.constants import DEFAULT_TYPE, SHIELD_TYPE, JUMPING, RUNNING, DUCKING, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD
+from dino_runner.utils.constants import DEFAULT_TYPE, HAMMER_TYPE, SHIELD_TYPE, JUMPING, RUNNING, DUCKING, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD, RUNNING_HAMMER, JUMPING_HAMMER, DUCKING_HAMMER
 from pygame.sprite import Sprite
 
 class Dinosaur(Sprite):
@@ -18,9 +18,9 @@ class Dinosaur(Sprite):
         self.state_jump = False
         self.jump_up = False
         self.type = DEFAULT_TYPE
-        self.run_img = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
-        self.jump_img = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
-        self.duck_img = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
+        self.run_img = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+        self.jump_img = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+        self.duck_img = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
         self.power_up_time = 0      
 
     def update(self, user_input):
@@ -75,4 +75,6 @@ class Dinosaur(Sprite):
     def activate_power_up(self, power_up_type):
         if power_up_type == SHIELD_TYPE:
             self.type = SHIELD_TYPE
-            self.power_up_time = self.POWER_UP_TIME
+        elif power_up_type == HAMMER_TYPE:
+            self.type = HAMMER_TYPE
+        self.power_up_time = self.POWER_UP_TIME

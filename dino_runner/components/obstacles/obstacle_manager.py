@@ -3,7 +3,7 @@ import pygame
 from dino_runner.components.obstacles.bird import Bird
 from dino_runner.components.obstacles.cactus import cactus
 from dino_runner.components.obstacles.cactusLarge import CactusLarge
-from dino_runner.utils.constants import BIRD, DEAD, LARGE_CACTUS, SHIELD_TYPE, SMALL_CACTUS
+from dino_runner.utils.constants import BIRD, DEAD, HAMMER_TYPE, LARGE_CACTUS, SHIELD_TYPE, SMALL_CACTUS
 
 
 class ObstacleManager:
@@ -29,12 +29,16 @@ class ObstacleManager:
 
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
-            if game.player.type == SHIELD_TYPE:
-                print('Shield activated, no damage recived')
-            elif game.player.dino_rect.colliderect(obstacle.rect):
-                game.player.image = DEAD
-                game.playing = False
-                break
+            
+            if game.player.dino_rect.colliderect(obstacle.rect):
+                if game.player.type == SHIELD_TYPE:
+                    print('Shield activated, no damage recived')
+                elif game.player.type == HAMMER_TYPE:
+                    self.obstacles.pop()
+                else:
+                    game.player.image = DEAD
+                    game.playing = False
+                    break
 
     def draw(self, screen):
         for obstacle in self.obstacles:
